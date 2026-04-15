@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS users(
     email VARCHAR(100) NOT NULL UNIQUE ,
     password VARCHAR(100) NOT NULL
 );
+
 CREATE TYPE transaction_type AS  ENUM ('expense','earning','investment');
 
 CREATE TABLE IF NOT EXISTS transactions(

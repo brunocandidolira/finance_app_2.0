@@ -9,6 +9,7 @@ app.use(express.json());
 
 app.get("/",async (req, res) => {
    try{
+  
     // Usar pool.query diretamente gerencia automaticamente o checkout e release da conexão
     const result = await pool.query("SELECT * FROM users");
     return res.json(result.rows);
@@ -18,12 +19,10 @@ app.get("/",async (req, res) => {
    }
 });
 
-app.listen(3000, async () => {
-  console.log("Example app listening on port 3000");
+app.listen(process.env.PORT, async () => {
+  console.log("Example app listening on port 8080!");
   try {
-    // Testa a conexão com uma query simples
-    await executeMigrations(); // Executa as migrações antes de testar a conexão
-    console.log("Migrations executed successfully");
+  
     const res = await pool.query("SELECT NOW()");
     console.log("Database connection established successfully at:", res.rows[0].now);
 
