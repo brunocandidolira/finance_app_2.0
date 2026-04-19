@@ -2,22 +2,31 @@ import "dotenv/config";
 import express from "express";
 import { pool } from "./src/db/postgres/clientPostgres.js";
 import executeMigrations from "./src/db/postgres/migrations/exec.js";
+import { userRouter } from "./src/routers/router_User.js";
 
 
-const app = express();
+export const app = express();
 app.use(express.json());
 
-app.get("/",async (req, res) => {
-   try{
-  
-    // Usar pool.query diretamente gerencia automaticamente o checkout e release da conexão
-    const result = await pool.query("SELECT * FROM users");
-    return res.json(result.rows);
-   }catch(error){
-    console.error("Database error:", error);
-    return res.status(500).json({ error: "Internal Server Error" });    
-   }
+app.use(userRouter);
+
+// Middleware Global de Erro
+app.use((err, req, res, next) => {
+  console.error(err);
+
+  if (err.name === 'ZodError') {
+    return res.status(400).json({ 
+      message: "Erro de validação", 
+      errors: err.errors 
+    });
+  }
+
+  res.status(err.status || 500).json({ 
+    error: err.message || 'Erro interno no servidor' 
+  });
 });
+
+
 
 app.listen(process.env.PORT, async () => {
   console.log("Example app listening on port 8080!");

@@ -1,13 +1,14 @@
-import {z} from 'zod';
+import { z } from "zod";
 
-export const UserSchema = z.object({
-  id: z.string(),
+// entrada (request)
+export const CreateUserSchema = z.object({
   first_name: z.string().min(1),
-    last_name: z.string().min(1),
+  last_name: z.string().min(1),
   email: z.string().email(),
-  passwordHash: z.string().min(8),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-}
+  password: z.string().min(8),
+});
 
-);
+// entidade persistida no banco
+export const UserSchema = CreateUserSchema.extend({
+  id: z.uuid(),
+});

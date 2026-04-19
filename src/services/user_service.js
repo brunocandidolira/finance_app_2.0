@@ -1,14 +1,15 @@
 import {v4 as uuidv4} from 'uuid';
-import { id } from 'zod/locales';
 import bcrypt from 'bcrypt';
 import { UserRepository } from '../repositories/user_repository.js';
 
 
 
-export class ClienteUserService{
+export class User_Service{
+
 async execute(createUserParams){
 
-//virifique se o email já existe(depois criar uma função para isso)
+//virifique se o email já existe(depois criar uma função para isso) 
+
 
 //gerar id do usuario
 const userid = uuidv4();
@@ -26,7 +27,9 @@ const user = {
 }
 //chamar o repositório para salvar o usuário
 const  repository = new UserRepository();
-return await repository.execute(user);
+await repository.execute(user);
+const{password, ...userWithoutPassword} = user;
+return userWithoutPassword;
 }
 
 }
