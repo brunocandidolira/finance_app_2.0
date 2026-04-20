@@ -21,4 +21,12 @@ export class UserRepository {
       );
       return results.rows[0];
  }
+async getUserById(id) {
+    const results = await clientPostgres.query(
+        "SELECT * FROM users WHERE id = $1",
+        [id]
+      );
+      return results.rows[0]; 
+
+}
 }

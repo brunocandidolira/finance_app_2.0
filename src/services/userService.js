@@ -49,14 +49,15 @@ catch (error) {
 
 }
 }
-async getUserByEmail(email) {
+async getUserById(params) {
 try {
-    const user = await this.repository.getUserByEmail(email);   
-return user;
+    const user = await this.repository.getUserById(params);   
+const{password, ...userWithoutPassword}= user;
+return userWithoutPassword;
 
 }   
 catch (error) {
-    throw new Error("Erro ao buscar usuário por email: " + error.message); 
+    throw new   Error("Erro ao buscar usuário: " + error.message);
 
 }
 }

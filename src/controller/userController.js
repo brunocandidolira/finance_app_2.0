@@ -24,7 +24,7 @@ export class user_Controller {
 }
 async getUser(req, res) {
     try {
-        const user = await this.userService.getUserByEmail(req.params.email);
+        const user = await this.userService.getUserById(req.params.id);
         return res.status(200).json(user);
     }
     catch (badrequest) {
