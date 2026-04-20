@@ -1,8 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import { pool } from "./src/db/postgres/clientPostgres.js";
-import executeMigrations from "./src/db/postgres/migrations/exec.js";
-import { userRouter } from "./src/routers/router_User.js";
+import { userRouter } from "./src/routers/routerUser.js";
 
 
 export const app = express();
