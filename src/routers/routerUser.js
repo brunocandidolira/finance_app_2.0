@@ -10,4 +10,4 @@ const asyncHandler = (fn) => (req, res, next) => {
 
 const userController = new user_Controller();
 
-userRouter.post("/users", asyncHandler(userController.createUser));
+userRouter.post("/users", asyncHandler(userController.createUser.bind(userController)));

@@ -16,7 +16,7 @@ export class UserRepository {
     }
  async getUserByEmail(email) {
     const results = await clientPostgres.query(
-        "SELECT * FROM users WHERE email = $1",
+        "SELECT * FROM users WHERE LOWER(email) = LOWER($1)",
         [email]
       );
       return results.rows[0];

@@ -1,6 +1,7 @@
 import {v4 as uuidv4} from 'uuid';
 import bcrypt from 'bcrypt';
 import { UserRepository } from '../repositories/userRepository.js';
+import { conflictError } from '../controller/error.js';
 
 
 export class User_Service{
@@ -9,11 +10,13 @@ export class User_Service{
     }
 
 async execute(createUserParams){
+    
 try{
+const normalizedEmail = createUserParams.email.trim().toLowerCase();
 //virifique se o email já existe(depois criar uma função para isso) 
-const existingUser = await this.repository.getUserByEmail(createUserParams.email);
+const existingUser = await this.repository.getUserByEmail(normalizedEmail);
 if(existingUser){
-    throw new Error("Email já cadastrado");
+   throw conflictError("Email já cadastrado");
 }
 //gerar id do usuario
 const userid = uuidv4();
@@ -25,6 +28,7 @@ const  hashPassword = await bcrypt.hash(createUserParams.password, 10);
 const user = {
     ...createUserParams,
  id: userid,
+ email: normalizedEmail,
  password: hashPassword,
 }
 //chamar o repositório para salvar o usuário
@@ -33,6 +37,14 @@ const{password, ...userWithoutPassword} = user;
 return userWithoutPassword;
 }
 catch (error) {
+    if (error.code === "23505") {
+        throw conflictError("Email já cadastrado");
+    }
+
+    if (error.status) {
+        throw error;
+    }
+
     throw new Error("Erro ao criar usuário: " + error.message); 
 
 }
@@ -49,4 +61,3 @@ catch (error) {
 }
 }
 }
-

@@ -7,7 +7,7 @@ export class user_Controller {
         this.userService = new User_Service();
     }
 
-    async createUser(req, res) {
+    async createUser(req, res,next) {
        try {
         const data = CreateUserSchema.parse(req.body);
         
@@ -15,8 +15,10 @@ export class user_Controller {
         const user = await this.userService.execute(data);
         res.status(201).json(user);
     }
-    catch (badrequest) {
-        res.status(400).json({ error: badrequest.message });
+    catch (error)
+ {
+
+       next(error);
 
     }
 }
