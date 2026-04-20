@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "husky install",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "start:dev": "node --watch index.js"
   },
   "keywords": [],
   "author": "",
