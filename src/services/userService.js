@@ -9,10 +9,12 @@ export class User_Service{
  this.repository = new UserRepository();
     }
 
+
 async execute(createUserParams){
     
 try{
 const normalizedEmail = createUserParams.email.trim().toLowerCase();
+
 //virifique se o email já existe(depois criar uma função para isso) 
 const existingUser = await this.repository.getUserByEmail(normalizedEmail);
 if(existingUser){
@@ -49,10 +51,26 @@ catch (error) {
 
 }
 }
+
+
+async getUser() {
+try {
+    const user = await this.repository.getUser();
+    const userWithoutPassword = user.map(({ password, ...userWithoutPassword }) => userWithoutPassword);
+   return userWithoutPassword;
+   
+}
+catch (error) {
+    throw new   Error("Erro ao buscar usuário: " + error.message);
+    
+}
+}
+
+
 async getUserById(params) {
 try {
     const user = await this.repository.getUserById(params);   
-const{password, ...userWithoutPassword}= user;
+const userWithoutPassword = user.map(({ password, ...userWithoutPassword }) => userWithoutPassword);
 return userWithoutPassword;
 
 }   
@@ -61,4 +79,38 @@ catch (error) {
 
 }
 }
+async userUpdate(id, updateUserParams) {
+try {
+    const user = await this.repository.getUserById(id);
+    if (!user) {
+        throw new Error("Usuário não encontrado");
+    }
+const  updatedUser = {
+    ...updateUserParams
+}
+    await this.repository.updateUser(user.id, updatedUser);
+    const { password, ...userWithoutPassword } = updatedUser;
+    return userWithoutPassword;
+
+}
+catch (error) {
+    throw new   Error("Erro ao buscar usuário: " + error.message);          
+
+}       
+}
+async userDelete(id) {
+try {
+    const user = await this.repository.getUserById(id);
+    if (!user) {
+        throw new Error("Usuário não encontrado");
+    }
+    await this.repository.deleteUser(id);
+}
+catch (error) {
+    throw new   Error("Erro ao buscar usuário: " + error.message);          
+
+}       
+}
+
+
 }
