@@ -29,4 +29,35 @@ async getUserById(id) {
       return results.rows[0]; 
 
 }
+async getUser() {
+ const results =
+    await clientPostgres.query(
+      `
+      SELECT *
+      FROM users
+      `
+    );
+
+  return results.rows;
+}
+   
+ async updateUser(id, updateUserParams) {
+    const results = await clientPostgres.query(
+        "UPDATE users SET first_name = $1, last_name = $2, email = $3, password = $4 WHERE id = $5 RETURNING *",
+        [
+         updateUserParams.first_name,
+         updateUserParams.last_name,
+         updateUserParams.email,
+         updateUserParams.password,
+         id
+        ]
+      );
+      return results.rows[0];
+ }
+ async deleteUser(id) {
+    await clientPostgres.query(
+        "DELETE FROM users WHERE id = $1",
+        [id]
+      );
+ }  
 }

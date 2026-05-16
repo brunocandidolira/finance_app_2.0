@@ -17,12 +17,22 @@ app.use((err, req, res, next) => {
     return res.status(400).json({ 
       message: "Erro de validação", 
       errors: err.errors 
-    });
+   });
   }
 
-  res.status(err.status || 500).json({ 
-    error: err.message || 'Erro interno no servidor' 
+  if(err.status === 500){ 
+   return res.status(500).json({
+    message: "Erro Interno do Servidor",
+    error: err.body.error || "Ocorreu um erro inesperado"
+   }); 
+  }
+  if(err.status==409  ){
+  return res.status(409).json({
+    message: "Conflito",
+    error: err.body || "Ocorreu um conflito"
   });
+  }
+  ;
 });
 
 

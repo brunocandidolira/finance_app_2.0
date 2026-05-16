@@ -2,6 +2,7 @@ import { CreateUserSchema } from '../db/schemas/userSchema.js';
 import { User_Service } from '../services/userService.js';
 
 
+
 export class user_Controller {
     constructor() {
         this.userService = new User_Service();
@@ -24,7 +25,7 @@ export class user_Controller {
 }
 async getUser(req, res) {
     try {
-        const user = await this.userService.getUserById(req.params.id);
+        const user = await this.userService.getUser();
         return res.status(200).json(user);
     }
     catch (badrequest) {
@@ -32,5 +33,38 @@ async getUser(req, res) {
 
     }
 
+}
+async getUserById(req, res) {
+    try {
+        const user = await this.userService.getUserById(req.params.id);
+        return res.status(200).json(user);
+    }
+    catch (badrequest) {
+        res.status(400).json({ error: badrequest.message });
+
+    }   
+}
+async userUpdate(req, res) {
+    try {
+        
+            const updatedUser = await this.userService.userUpdate(req.params.id, req.body);
+            return res.status(200).json(updatedUser);
+        
+       
+    }
+    catch (badrequest) {
+        res.status(400).json({ error: badrequest.message });
+
+    }   
+}
+async userDelete(req, res) {
+    try {
+        const user = await this.userService.getUserById(req.params.id);
+        return res.status(200).json(user);
+    }
+    catch (badrequest) {
+        res.status(400).json({ error: badrequest.message });
+
+    }   
 }
 }
