@@ -59,7 +59,7 @@ async userUpdate(req, res) {
 }
 async userDelete(req, res) {
     try {
-        const user = await this.userService.getUserById(req.params.id);
+        const user = await this.userService.userDelete(req.params.id);
         return res.status(200).json(user);
     }
     catch (badrequest) {
