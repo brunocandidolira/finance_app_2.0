@@ -1,11 +1,18 @@
 import "dotenv/config";
 import express from "express";
+import swaggerUi from "swagger-ui-express";
 import { pool } from "./src/db/postgres/clientPostgres.js";
 import { userRouter } from "./src/routers/routerUser.js";
+import { openApiSpec } from "./src/docs/openapi.js";
 
 
 export const app = express();
 app.use(express.json());
+
+app.get("/api-docs.json", (req, res) => {
+  res.json(openApiSpec);
+});
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiSpec));
 
 app.use(userRouter);
 
