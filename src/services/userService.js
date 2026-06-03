@@ -70,7 +70,10 @@ catch (error) {
 async getUserById(params) {
 try {
     const user = await this.repository.getUserById(params);   
-const userWithoutPassword = user.map(({ password, ...userWithoutPassword }) => userWithoutPassword);
+if (!user) {
+    return null;
+}
+const { password, ...userWithoutPassword } = user;
 return userWithoutPassword;
 
 }   
@@ -85,6 +88,15 @@ try {
     if (!user) {
         throw new Error("Usuário não encontrado");
     }
+
+      if(updateUserParams.password){
+
+         updateUserParams.password =
+            await bcrypt.hash(
+               updateUserParams.password,
+               10
+            );
+      }
 const  updatedUser = {
     ...updateUserParams
 }
