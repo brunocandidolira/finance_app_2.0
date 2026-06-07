@@ -6,7 +6,7 @@ import { userRouter } from "./src/routers/routerUser.js";
 import {authRouter} from "./src/routers/routerAuth.js";
 import { routerTransactions } from "./src/routers/routerTransactions.js";
 import { openApiSpec } from "./src/docs/openapi.js";
-
+import { corsMiddleware } from "./src/middleware/cors.js";
 
 export const app = express();
 app.use(express.json());
@@ -15,7 +15,7 @@ app.get("/api-docs.json", (req, res) => {
   res.json(openApiSpec);
 });
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiSpec));
-
+app.use(corsMiddleware);
 app.use(userRouter);
 app.use(authRouter);
 app.use(routerTransactions);

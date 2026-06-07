@@ -49,7 +49,20 @@ email:user.email
         expiresIn: "1h"
     }
 
-)
+);
+const refreshToken = jwt.sign(
+
+    {
+id: user.id,
+email:user.email
+    },
+    process.env.JWT_REFRESH_SECRET ,
+    {
+        expiresIn: "7d"
+    }
+
+);
+
 const {
   password: removedPassword,
   ...userWithoutPassword
@@ -57,7 +70,8 @@ const {
 
 return {
     user: userWithoutPassword,
-    token
+    token,
+    refreshToken
 }
 
 
@@ -70,7 +84,37 @@ return {
      "erro ao fazer login :" + error.message )
 
 }
-    }    
+    }
+
+    async refresh(refreshToken) {
+        try {
+            if (!refreshToken) {
+                throw unauthorizedError("Refresh token não fornecido");
+            }
+
+            const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
+
+            const newToken = jwt.sign(
+                {
+                    id: decoded.id,
+                    email: decoded.email
+                },
+                process.env.JWT_REFRESH_SECRET,
+                {
+                    expiresIn: "7h"
+                }
+            );
+
+            return {
+                token: newToken
+            };
+        } catch (error) {
+            if (error.status) {
+                throw error;
+            }
+            throw unauthorizedError("Refresh token inválido");
+        }
+    }
 
 }
 

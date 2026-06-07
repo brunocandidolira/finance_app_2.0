@@ -1,5 +1,6 @@
 import { jest } from "@jest/globals";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const mockUserRepository = {
   execute: jest.fn(),
@@ -262,6 +263,28 @@ describe("API", () => {
       expect(body).toEqual({
         error: "email ou senha incorretos  ",
       });
+    });
+
+    it("gera novo token com refresh token válido", async () => {
+      const refreshToken = "valid-refresh-token";
+      
+      const { response, body } = await request("/refresh", {
+        method: "POST",
+        body: JSON.stringify({ refreshToken }),
+      });
+
+      expect(response.status).toBe(200);
+      expect(body.token).toEqual(expect.any(String));
+    });
+
+    it("retorna 400 quando refresh token não fornecido", async () => {
+      const { response, body } = await request("/refresh", {
+        method: "POST",
+        body: JSON.stringify({}),
+      });
+
+      expect(response.status).toBe(400);
+      expect(body.error).toBe("Refresh token não fornecido");
     });
   });
 

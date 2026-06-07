@@ -37,6 +37,19 @@ next(error);
 }
 }
 
-
+async refresh(req, res, next) {
+try{
+    const { refreshToken } = req.body;
+    if(!refreshToken) {
+        return res.status(400).json({
+            error: "Refresh token não fornecido"
+        });
+    }
+    const tokens = await this.auth.refresh(refreshToken);
+    return res.status(200).json(tokens);
+}catch(error){
+    next(error);
+}
+}
 
 }
