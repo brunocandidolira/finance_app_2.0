@@ -11,7 +11,7 @@ const asyncHandler = (fn) => (req, res, next) => {
 };
 const auth= new AuthController();
 
-authRouter.post("/login",corsMiddleware, asyncHandler(auth.login.bind(auth)));
+authRouter.post("/auth/login",corsMiddleware, asyncHandler(auth.login.bind(auth)));
 authRouter.post("/refresh", corsMiddleware,asyncHandler(auth.refresh.bind(auth)));
 
 export default authRouter;

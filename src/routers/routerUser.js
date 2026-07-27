@@ -12,7 +12,7 @@ const asyncHandler = (fn) => (req, res, next) => {
 
 const userController = new user_Controller();
 
-userRouter.post("/users", corsMiddleware,middleware,asyncHandler(userController.createUser.bind(userController)));
+userRouter.post("/users", corsMiddleware,asyncHandler(userController.createUser.bind(userController)));
 userRouter.get("/users", corsMiddleware,middleware,asyncHandler(userController.getUser.bind(userController)));
 userRouter.get("/users/:id", corsMiddleware,middleware,asyncHandler(userController.getUserById.bind(userController)));
 userRouter.put("/users/:id", corsMiddleware,middleware, asyncHandler(userController.userUpdate.bind(userController)));
